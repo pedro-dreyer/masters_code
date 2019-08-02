@@ -2,6 +2,7 @@ import numpy as np
 import os
 import pandas as pd
 import xarray as xr
+import matplotlib.pyplot as plt
 
 RESULTS_NAMES = ['train_acc1', 'val_acc1', 'train_loss', 'val_loss', 'learning_rate']
 
@@ -120,6 +121,58 @@ class FullExperiment:
             for result_name in result_names:
                 for result_type in result_types:
                     print(result_name, experiment_results[result_name][result_type])
+                    
+    
+    def plot_compare_graph(self, 
+                           parameters_to_compare, result_to_compare, 
+                           parameters_to_filter=None, values_to_filter=None,
+                           ax = None, fig = None):
+    
+        title = 'comparing ' + parameters_to_compare[0]
+        if parameters_to_filter is not None:
+            title = title + ' with {} = {}'.format(parameters_to_filter, values_to_filter)
+
+        if fig is None and ax is None:
+            fig, ax = plt.subplots(1,1, constrained_layout=True)
+            fig.suptitle(title)
+            fig.set_size_inches((13, 5))
+
+
+        ax.set_xlabel('Epochs')
+        ax.set_ylabel(result_to_compare)
+
+        for experiment in self.list:
+
+            parameters_dict = experiment.parameters_dict
+            results_dataframe = experiment.results_df
+
+            plot_graph = True
+
+            if parameters_to_filter is not None:
+                for parameter_to_filter,value_to_filter in zip(parameters_to_filter,values_to_filter):
+                    if parameters_dict[parameter_to_filter] != value_to_filter:
+                        plot_graph = False
+                        break
+
+            if plot_graph == True:
+
+                string = None
+                for parameter_to_compare in parameters_to_compare:
+                    if string is None:
+                        string = parameter_to_compare + ' =' + str(parameters_dict[parameter_to_compare])
+                    else:
+                        string = string + ' and ' + parameter_to_compare + ' = ' + parameters_dict[parameter_to_compare]
+                x = range(1,int(parameters_dict['epochs'])+1)
+                y = results_dataframe[result_to_compare].mean(level=1)
+                result_plot, = ax.plot(x, y ,label = string)
+
+
+        ax.legend(loc='upper left', bbox_to_anchor=(1, 1))
+        return ax
+        #lines = [val_acc1_plot, train_acc1_plot, val_loss_plot, train_loss_plot, learning_rate_plot]
+
+        #ax.legend(lines, [l.get_label() for l in lines], loc='upper left', bbox_to_anchor=(1.4, 1))
+        
 
 
 class SingleExperiment:
