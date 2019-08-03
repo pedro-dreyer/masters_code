@@ -1,5 +1,5 @@
-datasets
-models
+datasets/cifar10
+datasets/cifar100
 results
 graphics
 .idea
