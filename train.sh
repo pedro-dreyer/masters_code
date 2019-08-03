@@ -2,16 +2,13 @@
 
 # test TAS with bad parameters
 
-python train.py --dataset cifar10 \
+python train.py --dataset cifar100 \
                 --architecture vgg19bn_ \
                 --gpu-id 0 \
                 --executions 2 \
-                --training-method sgd\
-                --learning-method tas\
+                --training-method sgd \
+                --learning-method constant \
                 --epochs 2 \
-                --sgd-lr 0.05 \
+                --sgd-lr 0.25,0.05,0.01,0.001 \
                 --sgd-momentum 0.9 \
-                --tas-alpha 300 \
-                --tas-beta 0.05 \
-                --tas-gamma 0.02 \
-                --results-dir tas_bad_parameters
+                --results-dir leaning_rate_testing
