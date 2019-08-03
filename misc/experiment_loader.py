@@ -42,16 +42,17 @@ class FullExperiment:
 
         self.list.sort(key=sort_fun, reverse=reverse)
 
-    def sort_by_results(self, result, metric, reverse):
+    def sort_by_results(self, result, metric, reverse=False, epoch_limit=None):
 
-        # TODO result and metric options
+        #metric: 'max_mean', 'min_mean'
+        #result: 'train_acc1', 'val_acc1', 'train_loss', 'val_loss', 'learning_rate'
 
         def sort_fun(elem):
-            return elem.get_experiment_summary()[result][metric]
+            return elem.experiment_results(epoch_limit=epoch_limit)[result][metric]
 
         self.list.sort(key=sort_fun, reverse=reverse)
 
-    def make_latex_table(self, parameter_list, result_list, result_type_list, name, precision):
+    def make_latex_table(self, parameter_list, result_list, result_type_list, name, precision, epoch_limit=None):
 
         latex_table = '\\multirow'
         latex_table += '{' + str(self.len) + '}{*}'
@@ -61,7 +62,7 @@ class FullExperiment:
             for parameter in parameter_list:
                 latex_table += ' & ' + str(experiment.parameters_dict[parameter])
 
-            experiment_summary = experiment.experiment_results()
+            experiment_summary = experiment.experiment_results(epoch_limit=epoch_limit)
             for result, result_type in zip(result_list, result_type_list):
                 result_value = experiment_summary[result][result_type]
                 result_str = str(result_value.round(precision))
@@ -89,7 +90,7 @@ class FullExperiment:
 
         return latex_table
 
-    def show_results(self, parameters, result_names, result_types):
+    def show_results(self, parameters, result_names, result_types, epoch_limit=None):
         for i_experiment, experiment in enumerate(self.list):
             print(10 * '-', 'EXPERIMENT {}'.format(i_experiment), 10 * '-')
             print(3 * '*', 'PARAMETERS', 3 * '*')
@@ -117,7 +118,7 @@ class FullExperiment:
                     print(parameter, ': ', experiment.parameters_dict[parameter])
 
             print(3 * '*', 'RESULTS', 3 * '*')
-            experiment_results = experiment.experiment_results()
+            experiment_results = experiment.experiment_results(epoch_limit=epoch_limit)
             for result_name in result_names:
                 for result_type in result_types:
                     print(result_name, experiment_results[result_name][result_type])
@@ -168,7 +169,7 @@ class FullExperiment:
 
 
         ax.legend(loc='upper left', bbox_to_anchor=(1, 1))
-        return ax
+        return fig, ax
         #lines = [val_acc1_plot, train_acc1_plot, val_loss_plot, train_loss_plot, learning_rate_plot]
 
         #ax.legend(lines, [l.get_label() for l in lines], loc='upper left', bbox_to_anchor=(1.4, 1))
@@ -214,11 +215,14 @@ class SingleExperiment:
     def experiment_results(self, epoch_limit=None):
 
         if epoch_limit is not None:
-            self.results_ds.drop(range(self.parameters_dict['epochs'], epoch_limit, -1), dim='epoch')
+            tmp_results_ds = self.results_ds.drop(range(self.parameters_dict['epochs'], epoch_limit, -1), dim='epoch')
+        else:
+            tmp_results_ds = self.results_ds
+           
 
         summary_dict = {}
         for result in RESULTS_NAMES:
-            result_da = self.results_ds[result]
+            result_da = tmp_results_ds[result]
 
             mean_da = result_da.mean(dim='execution')
             std_da = result_da.std(dim='execution')
