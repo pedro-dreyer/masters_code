@@ -1,5 +1,6 @@
 datasets/cifar10
 datasets/cifar100
+datasets/mnist
 results
 graphics
 .idea
