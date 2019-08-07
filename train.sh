@@ -1,14 +1,20 @@
 #!/usr/bin/env bash
 
-# test TAS with bad parameters
+# test the best hyperparameters found in the cifar 10 tests
 
-python train.py --dataset cifar100 \
-                --architecture vgg19bn_ \
+python train.py --dataset mnist \
+                --architecture lenet5 \
                 --gpu-id 0 \
                 --executions 2 \
-                --training-method sgd \
+                --batch-size 1024 \
+                --training-method sgd,adam,adagrad,rmsprop \
                 --learning-method constant \
-                --epochs 2 \
-                --sgd-lr 0.25,0.05,0.01,0.001 \
+                --epochs 100 \
+                --sgd-lr 0.05 \
                 --sgd-momentum 0.9 \
-                --results-dir leaning_rate_testing
+                --sgd-nesterov False \
+                --rmsprop-lr 0.0005 \
+                --adam-lr 0.0005 \
+                --adam-amsgrad True \
+                --adagrad-lr 0.05 \
+                --results-dir best_results_vgg19
