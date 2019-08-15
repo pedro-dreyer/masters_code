@@ -162,7 +162,7 @@ class FullExperiment:
                     if string is None:
                         string = parameter_to_compare + ' =' + str(parameters_dict[parameter_to_compare])
                     else:
-                        string = string + ' and ' + parameter_to_compare + ' = ' + parameters_dict[parameter_to_compare]
+                        string = string + ' and ' + parameter_to_compare + ' = ' + str(parameters_dict[parameter_to_compare])
                 x = range(1,int(parameters_dict['epochs'])+1)
                 y = results_dataframe[result_to_compare].mean(level=1)
                 result_plot, = ax.plot(x, y ,label = string)
