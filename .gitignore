@@ -2,7 +2,6 @@ datasets/cifar10
 datasets/cifar100
 datasets/mnist
 *.pdf
-*.txt
 *.csv
 *.tar
 graphics
