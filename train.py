@@ -450,14 +450,12 @@ def execute(experiment):
     train_loader = DataLoader(train_set,
                               batch_size=parameters['batch_size'],
                               num_workers=args.workers,
-                              shuffle=True,
-                              worker_init_fn=worker_init)
+                              shuffle=True)
 
     test_loader = DataLoader(test_set,
                             batch_size=parameters['batch_size'],
                             num_workers=args.workers,
-                            shuffle=True,
-                            worker_init_fn=worker_init)
+                            shuffle=True)
 
     print("\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
     print("TRAINSET LOADER SIZE: ====>>>> ", len(train_loader.sampler))
@@ -835,26 +833,27 @@ def main():
             csvfile.write('\n')
 
             for key, value in experiment['raw_results'].items():
-                csvfile.write(key + '\n')
-                for i_execution, execution in enumerate(value):
-                    writer.writerow(execution)
-                csvfile.write('\n')
+                if 'list' not in key:
+                    csvfile.write(key + '\n')
+                    for i_execution, execution in enumerate(value):
+                        writer.writerow(execution)
+                    csvfile.write('\n')
             # for execution in range(args.executions):
             #     for key in experiment['raw_results']:
             #         writer.
             #         writer.writerow(experiment['raw_results'][key][execution])
 
-        overall_stats[i_experiment] = experiment_stats
+        # overall_stats[i_experiment] = experiment_stats
 
 
-    print("\n\n\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n", "OVERALL STATISTICS", "\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n")
-    for key in overall_stats:
-        print("\n", key.upper())
-        print("\n", overall_stats[key].transpose())
-        print("\n", overall_stats[key].describe())
+    #print("\n\n\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n", "OVERALL STATISTICS", "\n$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n")
+    #for key in overall_stats:
+    #    print("\n", key.upper())
+    #    print("\n", overall_stats[key].transpose())
+    #    print("\n", overall_stats[key].describe())
         # print("\n", overall_stats[key].describe().loc[['mean', 'std']])
 
-    print("\n\n\n")
+    #print("\n\n\n")
 
 
 

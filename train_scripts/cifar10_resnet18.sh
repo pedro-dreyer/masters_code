@@ -2,14 +2,14 @@
 
 # test the best hyperparameters found in the cifar 10 tests
 
-python train.py --dataset mnist \
-                --architecture lenet5 \
-                --gpu-id 1 \
-                --executions 1 \
+python train.py --dataset cifar10 \
+                --architecture resnet18_ \
+                --gpu-id 0 \
+                --executions 3 \
                 --batch-size 128 \
-                --training-method sgd,adam,adagrad,rmsprop \
+                --training-method sgd,adam,rmsprop,adagrad \
                 --learning-method constant \
-                --epochs 2 \
+                --epochs 100 \
                 --sgd-lr 0.05 \
                 --sgd-momentum 0.9 \
                 --sgd-nesterov False \
@@ -17,4 +17,5 @@ python train.py --dataset mnist \
                 --adam-lr 0.0005 \
                 --adam-amsgrad True \
                 --adagrad-lr 0.05 \
+                --base-seed 42 \
                 --results-dir best_results_vgg19

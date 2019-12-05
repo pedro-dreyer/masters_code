@@ -5,16 +5,15 @@
 python train.py --dataset cifar10 \
                 --architecture resnet18_ \
                 --gpu-id 1 \
-                --executions 2 \
+                --executions 3 \
                 --batch-size 128 \
-                --training-method sgd,adam,rmsprop,adagrad \
-                --learning-method constant \
+                --training-method sgd \
+                --learning-method tas \
                 --epochs 100 \
                 --sgd-lr 0.05 \
                 --sgd-momentum 0.9 \
-                --sgd-nesterov False \
-                --rmsprop-lr 0.0005 \
-                --adam-lr 0.0005 \
-                --adam-amsgrad True \
-                --adagrad-lr 0.05 \
+                --tas-alpha 25 \
+                --tas-beta 0.7 \
+                --tas-gamma 0.02 \
+                --base-seed 42 \
                 --results-dir best_results_vgg19

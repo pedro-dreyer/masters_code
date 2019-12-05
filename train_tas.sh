@@ -6,7 +6,7 @@ python train.py --dataset cifar10 \
                 --architecture resnet18_ \
                 --gpu-id 0 \
                 --executions 2 \
-                --batch-size 128 \
+                --batch-size 512 \
                 --training-method sgd \
                 --learning-method tas \
                 --epochs 100 \

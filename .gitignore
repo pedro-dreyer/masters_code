@@ -4,6 +4,7 @@ datasets/mnist
 *.pdf
 *.csv
 *.tar
+*.tar.gz
 graphics
 .idea
 
